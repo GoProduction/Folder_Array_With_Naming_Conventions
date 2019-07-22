@@ -22,10 +22,18 @@ namespace CreateFolderConventions
         {
             Console.Clear();
             Context();
-            int sel = Console.Read();
-            if (sel == '1') NameAndNumber();
-            if (sel == '2') NameAndDate();
-            if (sel == '3') return 1;
+            try
+            {
+                int sel = int.Parse(Console.ReadLine());
+                if (sel == 1) NameAndNumber();
+                if (sel == 2) NameAndDate();
+                if (sel == 3) return 1;
+            }
+            catch
+            {
+                Console.WriteLine("Invalid input. Try again...");
+                FlushInput();
+            }
             return 0;
         }
         public static int NameAndNumber()
@@ -40,7 +48,7 @@ namespace CreateFolderConventions
                 string folderName = "";
                 bool valid = true;
 
-                //Enter top-folder location
+                //ENTER TOP-FOLDER LOCATION
                 while (valid)
                 {
                     FlushInput();
@@ -54,27 +62,23 @@ namespace CreateFolderConventions
                         continue;
                     }
                 }
-                //Enter folder names
+                //ENTER FOLDER NAMES
                 FlushInput();
                 Console.Write("Folder name: ");
                 string subfolder = Console.ReadLine();
                 FlushInput();
 
-                //Enter first folder number
+                //ENTER FIRST FOLDER NUMBER
                 Console.Write("Number of FIRST folder: ");
-                string inputa = Console.ReadLine();
-                int number;
-                int.TryParse(inputa, out number);
+                int number = int.Parse(Console.ReadLine());
                 FlushInput();
 
-                //Enter last folder number
+                //ENTER LAST FOLDER NUMBER
                 Console.WriteLine("Number of LAST folder: ");
-                string inputb = Console.ReadLine();
-                int count;
-                int.TryParse(inputb, out count);
+                int count = int.Parse(Console.ReadLine());
                 FlushInput();
 
-                //For-loop that creates the folders from the given directory
+                //FOR-LOOP THAT CREATES THE FOLDERS IN THE GIVEN DIRECTORY
                 Console.WriteLine("Spinning up...");
                 for (double i = number; i <= count; i++)
                 {
@@ -92,7 +96,7 @@ namespace CreateFolderConventions
 
                 }
 
-                //Prompt to start again/exit
+                //PROMPT TO START AGAIN/EXIT
                 Console.WriteLine("Would you like to try again? y/n");
                 string sel = Console.ReadLine();
                 if (sel == "y") continue;
@@ -108,7 +112,7 @@ namespace CreateFolderConventions
         public static int NameAndDate()
         {
             Console.Clear();
-            Console.WriteLine("# # # # # # NAME and DATE of a SINGLE folder");
+            Console.WriteLine("# # # # # # NAME and DATE of folder(s) # # # # # #");
             Console.WriteLine("");
             bool cont = true;
             string dateFormat = "";
@@ -116,9 +120,66 @@ namespace CreateFolderConventions
             {
                 string folderInput = "";
                 string folderName = "";
+                int selTypeInput = 0;
+                DateTime dateStart = new DateTime();
+                DateTime dateEnd = new DateTime();
+                TimeSpan dateSpan;
+                DateTime[] dateArray;
                 bool valid = true;
 
-                //Enter top-folder location
+                //SELECT TYPE OF ARRAY
+                while (valid)
+                {
+                    FlushInput();
+                    Console.WriteLine("Enter what type of folder array you would like to create:");
+                    Console.WriteLine("1) Today's date (one folder)");
+                    Console.WriteLine("2) Another date (one folder)");
+                    Console.WriteLine("3) Several dates (multiple folders)");
+                    try
+                    {
+                        selTypeInput = int.Parse(Console.ReadLine());
+                        FlushInput();
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Invalid input. Please try again...");
+                        FlushInput();
+                        continue;
+                    }
+                    
+                    if(selTypeInput == 1)
+                    {
+                        dateStart = DateTime.Now;
+                        dateEnd = DateTime.Now;
+                        Console.WriteLine("CONSOLE: dateStart is " + dateStart);
+                        Console.WriteLine("CONSOLE: dateEnd is " + dateEnd);
+                        break;
+                    }
+                    else if(selTypeInput == 2)
+                    {
+                        Console.Write("Please enter a date with a valid format (ex. January 1st, 2010 would be 01/01/2010)");
+                        dateStart = DateTime.Parse(Console.ReadLine());
+                        dateEnd = dateStart;
+                        Console.WriteLine("CONSOLE: dateStart is " + dateStart);
+                        Console.WriteLine("CONSOLE: dateEnd is " + dateEnd);
+                        break;
+                    }
+                    else if (selTypeInput == 3)
+                    {
+                        Console.WriteLine("Enter the start date with a valid format (January 1st, 2010 would be 01/01/2010");
+                        dateStart = DateTime.Parse(Console.ReadLine());
+                        FlushInput();
+                        Console.WriteLine("Enter the end date with a valid format (January 1st, 2010 would be 01/01/2010");
+                        dateEnd = DateTime.Parse(Console.ReadLine());
+                        FlushInput();
+                        Console.WriteLine("CONSOLE: dateStart is " + dateStart);
+                        Console.WriteLine("CONSOLE: dateEnd is " + dateEnd);
+                        break;
+                    }
+
+                }
+
+                //ENTER TOP-FOLDER DIRECTORY
                 while (valid)
                 {
                     FlushInput();
@@ -132,12 +193,12 @@ namespace CreateFolderConventions
                         continue;
                     }
                 }
-                //Enter folder names
+                //ENTER FOLDER NAMES
                 FlushInput();
                 Console.Write("Folder name: ");
                 string subfolder = Console.ReadLine();
                 
-                //Enter date format of folder
+                //ENTER DATE FORMAT OF FOLDER
                 while (valid)
                 {
                     FlushInput();
@@ -146,23 +207,23 @@ namespace CreateFolderConventions
                     Console.WriteLine("    2) Jan 1 2019");
                     Console.WriteLine("    3) 01 01 2019");
                     Console.WriteLine("    4) 01012019");
-                    int selDateFormat = Console.Read();
-                    if(selDateFormat == '1')
+                    int selDateFormat = int.Parse(Console.ReadLine());
+                    if(selDateFormat == 1)
                     {
                         dateFormat = "_MMMM dd yyyy";
                         break;
                     }
-                    else if(selDateFormat == '2')
+                    else if(selDateFormat == 2)
                     {
                         dateFormat = "_MMM dd yyyy";
                         break;
                     }
-                    else if(selDateFormat == '3')
+                    else if(selDateFormat == 3)
                     {
                         dateFormat = "_MM dd yyyy";
                         break;
                     }
-                    else if(selDateFormat == '4')
+                    else if(selDateFormat == 4)
                     {
                         dateFormat = "_MMddyyyy";
                         break;
@@ -174,25 +235,34 @@ namespace CreateFolderConventions
                     }
 
                 }
-                DateTime date = DateTime.Now;
-                string dateVal = date.ToString(dateFormat);
+                
                 FlushInput();
+                //INITIALIZE DATE VARIABLES FOR CALCULATION
+                dateSpan = dateEnd.Subtract(dateStart);
+                dateArray = new DateTime[dateSpan.Days];
               
-                //Creates the folder from the given directory
+                //CREATES TO FOLDER(S) FROM THE GIVEN DIRECTORY
                 Console.WriteLine("Spinning up...");
-                string pathString = Path.Combine(folderName, subfolder + dateVal);
-                if (!Directory.Exists(pathString))
+                for(int i = 0; i < dateSpan.Days; i++)
                 {
-                    Directory.CreateDirectory(pathString);
-                    Console.WriteLine("Created: " + subfolder + dateVal);
+                    
+                    dateArray[i] = dateStart;
+                    string dateVal = dateStart.ToString(dateFormat);
+                    dateStart = dateStart.AddDays(1);
+                    string pathString = Path.Combine(folderName, subfolder + dateVal);
+                    if (!Directory.Exists(pathString))
+                    {
+                        Directory.CreateDirectory(pathString);
+                        Console.WriteLine("Created: " + subfolder + dateVal);
+                    }
+                    else
+                    {
+                        Console.WriteLine("File \"{0}\" already exists.", pathString);
+                        break;
+                    }
                 }
-                else
-                {
-                    Console.WriteLine("File \"{0}\" already exists.", pathString);
-                    break;
-                }
-
-                //Prompt to start again/exit
+                
+                //PROMPT TO START AGAIN/EXIT
                 Console.WriteLine(dateFormat);
                 Console.WriteLine("Would you like to try again? y/n");
                 string sel = Console.ReadLine();
@@ -205,7 +275,8 @@ namespace CreateFolderConventions
             }
             return 0;
         }
-        //Empties the input stream buffer
+
+        //EMPTIES THE INPUT STREAM BUFFER
         private static void FlushInput()
         {
             while (Console.In.Peek() != -1)
